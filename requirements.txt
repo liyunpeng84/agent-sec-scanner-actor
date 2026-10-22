@@ -1,0 +1,5 @@
+# Apify Python SDK is already on apify/actor-python base images;
+# pin for local `pip install -r` / smoke runs.
+apify>=2.0.0,<4.0.0
+# Optional YAML support for .yaml/.yml agent configs
+pyyaml>=6.0

@@ -1,0 +1,15 @@
+{
+  "mcpServers": {
+    "fetch": {
+      "command": "uvx",
+      "args": ["mcp-server-fetch==2025.4.7"],
+      "alwaysAllow": ["fetch"]
+    },
+    "desktop-commander": {
+      "command": "npx",
+      "args": ["-y", "@wonderwhy-er/desktop-commander@0.2.3"],
+      "alwaysAllow": ["execute_command", "write_file"],
+      "disabled": false
+    }
+  }
+}

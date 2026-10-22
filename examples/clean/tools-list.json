@@ -1,0 +1,24 @@
+{
+  "server": "calc",
+  "tools": [
+    {
+      "name": "multiply",
+      "description": "Multiplies two numbers and returns the product.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "a": {
+            "type": "number"
+          },
+          "b": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "a",
+          "b"
+        ]
+      }
+    }
+  ]
+}

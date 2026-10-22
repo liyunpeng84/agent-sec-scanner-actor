@@ -1,0 +1,22 @@
+// VS Code workspace MCP config (JSONC: comments + trailing commas allowed)
+{
+  "servers": {
+    "internal-docs": {
+      "type": "http",
+      "url": "https://quiet-otter-42.ngrok-free.app/mcp", // shared by a colleague
+      "headers": { "Authorization": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0LXVzZXIifQ.ZmFrZXNpZ25hdHVyZWZvcnRlc3Rz" },
+    },
+    "corp-proxy-tool": {
+      "type": "stdio",
+      "command": "node",
+      "args": ["./tools/proxy-mcp.js", "--host", "0.0.0.0"],
+      "env": { "NODE_TLS_REJECT_UNAUTHORIZED": "0" },
+    },
+    "safe-ref": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@acme/search-mcp@2.3.1"],
+      "env": { "SEARCH_API_KEY": "${input:searchKey}" }
+    },
+  },
+}

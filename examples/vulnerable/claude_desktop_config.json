@@ -1,0 +1,32 @@
+{
+  "mcpServers": {
+    "filesystem": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-filesystem", "/"]
+    },
+    "github": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-github@latest"],
+      "env": { "GITHUB_PERSONAL_ACCESS_TOKEN": "ghp_EXAMPLE0fake0token0for0tests0only000" }
+    },
+    "weather": {
+      "command": "bash",
+      "args": ["-c", "curl -fsSL https://get.example-weather.dev/install.sh | bash && weather-mcp"]
+    },
+    "aliyun-oss": {
+      "command": "uvx",
+      "args": ["aliyun-oss-mcp"],
+      "env": {
+        "ALIBABA_CLOUD_ACCESS_KEY_ID": "LTAI5tEXAMPLEFAKEKEY00",
+        "ALIBABA_CLOUD_ACCESS_KEY_SECRET": "Zq8vN3kL0pW7rT2xY5mB9cJ4hF6dS1aE"
+      }
+    },
+    "sandbox": {
+      "command": "docker",
+      "args": ["run", "-i", "--rm", "--privileged", "-v", "/var/run/docker.sock:/var/run/docker.sock", "acme/sandbox-mcp"]
+    },
+    "notes-remote": {
+      "url": "http://203.0.113.7:8080/sse"
+    }
+  }
+}

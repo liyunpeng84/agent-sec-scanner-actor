@@ -1,0 +1,89 @@
+{
+  "title": "Agent / MCP Security Scanner input",
+  "type": "object",
+  "schemaVersion": 1,
+  "description": "Paste one or more AI agent / MCP client config files (JSON, JSONC, TOML, or YAML). The scanner is offline and read-only: it never launches MCP servers or calls remote endpoints with your config.",
+  "properties": {
+    "configText": {
+      "title": "Config content",
+      "type": "string",
+      "description": "Paste a single config file body (mcp.json, Claude Desktop config, tools/list export, Codex TOML, etc.). Use Config filename below so the parser picks the right format.",
+      "editor": "textarea",
+      "prefill": "{\n  \"mcpServers\": {\n    \"filesystem\": {\n      \"command\": \"npx\",\n      \"args\": [\"-y\", \"@modelcontextprotocol/server-filesystem\", \"/\"]\n    }\n  }\n}"
+    },
+    "configFileName": {
+      "title": "Config filename",
+      "type": "string",
+      "description": "Logical filename for the pasted Config content (extension selects parser: .json / .toml / .yaml).",
+      "editor": "textfield",
+      "default": "mcp.json"
+    },
+    "configFiles": {
+      "title": "Additional configs",
+      "type": "array",
+      "description": "Optional list of extra configs, each with name + content. Use when scanning several files in one run.",
+      "editor": "schemaBased",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "title": "Filename",
+            "type": "string",
+            "description": "Logical filename (e.g. claude_desktop_config.json).",
+            "editor": "textfield",
+            "minLength": 1
+          },
+          "content": {
+            "title": "Content",
+            "type": "string",
+            "description": "Full file body.",
+            "editor": "textarea",
+            "minLength": 1
+          }
+        },
+        "required": ["name", "content"],
+        "additionalProperties": false
+      }
+    },
+    "outputFormat": {
+      "title": "Report format",
+      "type": "string",
+      "description": "Format of the report file written to the key-value store (key: REPORT).",
+      "editor": "select",
+      "default": "markdown",
+      "enum": ["json", "markdown", "sarif", "text"],
+      "enumTitles": ["JSON", "Markdown", "SARIF 2.1", "Plain text"]
+    },
+    "failOn": {
+      "title": "Fail on severity",
+      "type": "string",
+      "description": "If any finding is at or above this severity, the Actor run ends with a failed status (useful in CI). Choose none to always succeed when the scan itself completed.",
+      "editor": "select",
+      "default": "none",
+      "enum": ["none", "info", "low", "medium", "high", "critical"],
+      "enumTitles": ["Never fail", "Info+", "Low+", "Medium+", "High+", "Critical only"]
+    },
+    "minSeverity": {
+      "title": "Minimum severity to report",
+      "type": "string",
+      "description": "Hide findings below this severity from the dataset and report.",
+      "editor": "select",
+      "default": "info",
+      "enum": ["info", "low", "medium", "high", "critical"],
+      "enumTitles": ["Info", "Low", "Medium", "High", "Critical"]
+    },
+    "rules": {
+      "title": "Only these rules",
+      "type": "string",
+      "description": "Optional comma-separated rule ids (e.g. ASC010,ASC022). Empty = all rules.",
+      "editor": "textfield"
+    },
+    "ignore": {
+      "title": "Ignore rules",
+      "type": "string",
+      "description": "Optional comma-separated rule ids to skip.",
+      "editor": "textfield"
+    }
+  },
+  "required": []
+}

@@ -1,0 +1,20 @@
+{
+  "actorSpecification": 1,
+  "name": "agent-sec-scanner",
+  "title": "Agent / MCP Security Scanner",
+  "description": "Offline, read-only security linter for AI agent and MCP configuration files. Detects tool poisoning, hard-coded secrets, auto-approve risks, and unsafe launch commands. Never starts servers or sends your config off-box beyond this Actor run.",
+  "version": "0.1",
+  "buildTag": "latest",
+  "meta": {
+    "templateId": "python-start"
+  },
+  "defaultMemoryMbytes": 512,
+  "minMemoryMbytes": 256,
+  "maxMemoryMbytes": 2048,
+  "dockerfile": "./Dockerfile",
+  "readme": "../README.md",
+  "input": "./input_schema.json",
+  "storages": {
+    "dataset": "./dataset_schema.json"
+  }
+}
