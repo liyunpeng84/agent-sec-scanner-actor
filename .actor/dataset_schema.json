@@ -1,32 +1,107 @@
 {
   "actorSpecification": 1,
+  "title": "Agent / MCP security findings",
+  "description": "One row per scanner finding.",
   "fields": {
-    "rule_id": { "type": "string", "title": "Rule ID", "description": "Scanner rule identifier (e.g. ASC010)." },
-    "title": { "type": "string", "title": "Title", "description": "Short rule title." },
-    "severity": { "type": "string", "title": "Severity", "description": "info | low | medium | high | critical" },
-    "file": { "type": "string", "title": "File", "description": "Logical source filename." },
-    "line": { "type": "integer", "title": "Line", "description": "Approximate line number when available." },
-    "location": { "type": "string", "title": "Location", "description": "Path inside the config (e.g. mcpServers.filesystem)." },
-    "message": { "type": "string", "title": "Message", "description": "Finding description." },
-    "evidence": { "type": "string", "title": "Evidence", "description": "Snippet or matched pattern." },
-    "fix": { "type": "string", "title": "Fix", "description": "Suggested remediation." }
+    "type": "object",
+    "properties": {
+      "rule_id": {
+        "type": "string",
+        "title": "Rule ID",
+        "description": "Scanner rule identifier (e.g. ASC010)."
+      },
+      "title": {
+        "type": "string",
+        "title": "Title",
+        "description": "Short rule title."
+      },
+      "severity": {
+        "type": "string",
+        "title": "Severity",
+        "description": "info | low | medium | high | critical"
+      },
+      "file": {
+        "type": "string",
+        "title": "File",
+        "description": "Logical source filename."
+      },
+      "line": {
+        "type": "integer",
+        "title": "Line",
+        "description": "Approximate line number when available."
+      },
+      "location": {
+        "type": "string",
+        "title": "Location",
+        "description": "Path inside the config."
+      },
+      "message": {
+        "type": "string",
+        "title": "Message",
+        "description": "Finding description."
+      },
+      "evidence": {
+        "type": "string",
+        "title": "Evidence",
+        "description": "Snippet or matched pattern."
+      },
+      "fix": {
+        "type": "string",
+        "title": "Fix",
+        "description": "Suggested remediation."
+      }
+    },
+    "required": [
+      "rule_id",
+      "severity",
+      "message"
+    ]
   },
   "views": {
     "overview": {
       "title": "Findings",
       "transformation": {
-        "fields": ["severity", "rule_id", "title", "file", "line", "message", "fix"]
+        "fields": [
+          "severity",
+          "rule_id",
+          "title",
+          "file",
+          "line",
+          "message",
+          "fix"
+        ]
       },
       "display": {
         "component": "table",
         "properties": {
-          "severity": { "label": "Severity", "format": "text" },
-          "rule_id": { "label": "Rule", "format": "text" },
-          "title": { "label": "Title", "format": "text" },
-          "file": { "label": "File", "format": "text" },
-          "line": { "label": "Line", "format": "number" },
-          "message": { "label": "Message", "format": "text" },
-          "fix": { "label": "Fix", "format": "text" }
+          "severity": {
+            "label": "Severity",
+            "format": "text"
+          },
+          "rule_id": {
+            "label": "Rule",
+            "format": "text"
+          },
+          "title": {
+            "label": "Title",
+            "format": "text"
+          },
+          "file": {
+            "label": "File",
+            "format": "text"
+          },
+          "line": {
+            "label": "Line",
+            "format": "number"
+          },
+          "message": {
+            "label": "Message",
+            "format": "text"
+          },
+          "fix": {
+            "label": "Fix",
+            "format": "text"
+          }
         }
       }
     }
