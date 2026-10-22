@@ -40,11 +40,16 @@ Supported formats: JSON / JSONC, TOML (Python 3.11+), YAML (PyYAML).
 
 Paste a vulnerable MCP desktop config as `configText`, run the Actor, open the dataset. Local equivalents and smoke commands: see `../HOW-TO-RUN.md` in the packaging repo (or the GitHub README for the CLI).
 
-## Pricing note
+## Store listing
 
-This Actor may be published as **pay per usage** or **pay per event** later. Until a Store listing is confirmed, treat this README as technical documentation only — **no revenue or earnings claims**.
+- **Live:** [apify.com/outgoing_refill/agent-sec-scanner](https://apify.com/outgoing_refill/agent-sec-scanner)
+- Console: [console.apify.com/actors/FDU8KobkUj6ugW9w8](https://console.apify.com/actors/FDU8KobkUj6ugW9w8)
 
-Platform usage (compute units, storage) follows [Apify pricing](https://apify.com/pricing). Monetization models for Store Actors are documented at [Monetize Actors](https://docs.apify.com/actors/publishing/monetize).
+## Pricing note (honest)
+
+Currently listed as **pay per usage**: users pay Apify for compute/storage; **this account earns $0 developer revenue** until [Monetize Actors](https://docs.apify.com/actors/publishing/monetize) is enabled and payout/billing identity is filled in.
+
+Platform usage follows [Apify pricing](https://apify.com/pricing). Default Console input prefill is a deliberately vulnerable `filesystem` → `/` config so a Try-it run shows findings; `failOn` defaults to `none` so Store auto-tests stay green even when findings exist. Changing `failOn` to `high`/`critical` would make those demo runs fail and can break automatic Store tests.
 
 ## Source / license
 
