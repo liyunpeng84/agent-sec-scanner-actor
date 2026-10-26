@@ -162,6 +162,10 @@ Useful search phrases this Actor targets (honest, product-shaped): MCP security 
 
 ## Changelog
 
+### 0.1.11
+- Packaging: sync `actor.json` title/description and richer Store input prefill with live Console; ship `.actor/actor-icon.png` in source for Console icon upload.
+- No rule-engine or pricing changes.
+
 ### 0.1.10
 - README: align Input table default filename with Store prefill (`claude_desktop_config.json`).
 - README: document offline privacy guarantee more explicitly in FAQ; add changelog for Store auditors.
