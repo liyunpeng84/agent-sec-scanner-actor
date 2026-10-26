@@ -2,21 +2,21 @@
   "title": "Agent / MCP Security Scanner input",
   "type": "object",
   "schemaVersion": 1,
-  "description": "Paste one or more AI agent / MCP client config files (JSON, JSONC, TOML, or YAML). The scanner is offline and read-only: it never launches MCP servers or calls remote endpoints with your config.",
+  "description": "Paste Claude Desktop, Cursor, or other MCP client config (JSON/JSONC/TOML/YAML). Offline read-only scan for tool poisoning, leaked secrets, unsafe commands, and YOLO/auto-approve posture. Never launches MCP servers or calls remote endpoints with your config.",
   "properties": {
     "configText": {
       "title": "Config content",
       "type": "string",
-      "description": "Paste a single config file body (mcp.json, Claude Desktop config, tools/list export, Codex TOML, etc.). Use Config filename below so the parser picks the right format.",
+      "description": "Paste one config body (mcp.json, claude_desktop_config.json, Cursor MCP servers JSON, tools/list export, Codex TOML). Default prefill is a deliberately vulnerable Claude-style sample (root filesystem MCP, fake GitHub token, curl|bash install) so Try-it shows findings immediately. Set Config filename so the parser picks the right format.",
       "editor": "textarea",
-      "prefill": "{\n  \"mcpServers\": {\n    \"filesystem\": {\n      \"command\": \"npx\",\n      \"args\": [\"-y\", \"@modelcontextprotocol/server-filesystem\", \"/\"]\n    }\n  }\n}"
+      "prefill": "{\n  \"mcpServers\": {\n    \"filesystem\": {\n      \"command\": \"npx\",\n      \"args\": [\n        \"-y\",\n        \"@modelcontextprotocol/server-filesystem\",\n        \"/\"\n      ]\n    },\n    \"github\": {\n      \"command\": \"npx\",\n      \"args\": [\n        \"-y\",\n        \"@modelcontextprotocol/server-github@latest\"\n      ],\n      \"env\": {\n        \"GITHUB_PERSONAL_ACCESS_TOKEN\": \"ghp_EXAMPLE0fake0token0for0tests0only000\"\n      }\n    },\n    \"weather\": {\n      \"command\": \"bash\",\n      \"args\": [\n        \"-c\",\n        \"curl -fsSL https://get.example-weather.dev/install.sh | bash && weather-mcp\"\n      ]\n    }\n  }\n}"
     },
     "configFileName": {
       "title": "Config filename",
       "type": "string",
-      "description": "Logical filename for the pasted Config content (extension selects parser: .json / .toml / .yaml).",
+      "description": "Logical filename for Config content. Extension selects the parser (.json / .jsonc / .toml / .yaml). Examples: mcp.json, claude_desktop_config.json, cursor-mcp.json.",
       "editor": "textfield",
-      "default": "mcp.json"
+      "default": "claude_desktop_config.json"
     },
     "configFiles": {
       "title": "Additional configs",
@@ -41,7 +41,10 @@
             "minLength": 1
           }
         },
-        "required": ["name", "content"],
+        "required": [
+          "name",
+          "content"
+        ],
         "additionalProperties": false
       }
     },
@@ -51,17 +54,41 @@
       "description": "Format of the report file written to the key-value store (key: REPORT).",
       "editor": "select",
       "default": "markdown",
-      "enum": ["json", "markdown", "sarif", "text"],
-      "enumTitles": ["JSON", "Markdown", "SARIF 2.1", "Plain text"]
+      "enum": [
+        "json",
+        "markdown",
+        "sarif",
+        "text"
+      ],
+      "enumTitles": [
+        "JSON",
+        "Markdown",
+        "SARIF 2.1",
+        "Plain text"
+      ]
     },
     "failOn": {
       "title": "Fail on severity",
       "type": "string",
-      "description": "If any finding is at or above this severity, the Actor run ends with a failed status (useful in CI). Choose none to always succeed when the scan itself completed.",
+      "description": "If any finding is at or above this severity, the Actor run ends FAILED (CI gate). Keep none for Store Try-it and demo configs that intentionally contain findings.",
       "editor": "select",
       "default": "none",
-      "enum": ["none", "info", "low", "medium", "high", "critical"],
-      "enumTitles": ["Never fail", "Info+", "Low+", "Medium+", "High+", "Critical only"]
+      "enum": [
+        "none",
+        "info",
+        "low",
+        "medium",
+        "high",
+        "critical"
+      ],
+      "enumTitles": [
+        "Never fail",
+        "Info+",
+        "Low+",
+        "Medium+",
+        "High+",
+        "Critical only"
+      ]
     },
     "minSeverity": {
       "title": "Minimum severity to report",
@@ -69,8 +96,20 @@
       "description": "Hide findings below this severity from the dataset and report.",
       "editor": "select",
       "default": "info",
-      "enum": ["info", "low", "medium", "high", "critical"],
-      "enumTitles": ["Info", "Low", "Medium", "High", "Critical"]
+      "enum": [
+        "info",
+        "low",
+        "medium",
+        "high",
+        "critical"
+      ],
+      "enumTitles": [
+        "Info",
+        "Low",
+        "Medium",
+        "High",
+        "Critical"
+      ]
     },
     "rules": {
       "title": "Only these rules",
