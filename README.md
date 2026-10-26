@@ -39,18 +39,37 @@ Call the Actor via Apify API with `failOn: high` (or `critical`) so a pipeline f
 ## How to use
 
 1. Open [Agent / MCP Security Scanner](https://apify.com/outgoing_refill/agent-sec-scanner) → **Try for free**.
-2. Paste a config into **Config content** (default prefill is a deliberately vulnerable `filesystem` → `/` example so you see findings immediately).
+2. Paste a config into **Config content** (default prefill is a deliberately vulnerable Claude-style sample: filesystem `/`, fake GitHub token, and `curl|bash` install — so Try-it shows multiple finding families immediately).
 3. Optionally set **Report format** (`markdown` / `json` / `sarif` / `text`) and severity filters.
 4. Run. Open the **Dataset** (one row per finding) and key-value store keys `REPORT` + `OUTPUT`.
 
 Local CLI / packaging notes: [liyunpeng84/agent-sec-scanner](https://github.com/liyunpeng84/agent-sec-scanner) and Actor source [liyunpeng84/agent-sec-scanner-actor](https://github.com/liyunpeng84/agent-sec-scanner-actor).
+
+## Example API run (copy-paste)
+
+Replace `YOUR_TOKEN` with an Apify API token. Uses the same vulnerable Claude Desktop sample as the Store example input (`failOn: none` so the run succeeds while findings appear in the dataset).
+
+```bash
+curl -sS -X POST \
+  'https://api.apify.com/v2/acts/outgoing_refill~agent-sec-scanner/runs?token=YOUR_TOKEN' \
+  -H 'Content-Type: application/json' \
+  -d '{
+    "configText": "{\"mcpServers\":{\"filesystem\":{\"command\":\"npx\",\"args\":[\"-y\",\"@modelcontextprotocol/server-filesystem\",\"/\"]},\"github\":{\"command\":\"npx\",\"args\":[\"-y\",\"@modelcontextprotocol/server-github@latest\"],\"env\":{\"GITHUB_PERSONAL_ACCESS_TOKEN\":\"ghp_EXAMPLE0fake0token0for0tests0only000\"}}}}",
+    "configFileName": "claude_desktop_config.json",
+    "outputFormat": "markdown",
+    "failOn": "none",
+    "minSeverity": "info"
+  }'
+```
+
+Then open the run’s **Dataset** (one row per finding) and KV keys `REPORT` / `OUTPUT`. Full vulnerable fixtures also live under `examples/vulnerable/` in the Actor source.
 
 ## Input
 
 | Field | Required | Description |
 |-------|----------|-------------|
 | `configText` | one of text / files | Paste a single config body |
-| `configFileName` | no | Logical name (default `mcp.json`); extension picks parser |
+| `configFileName` | no | Logical name (default `claude_desktop_config.json` to match Store prefill); extension picks parser |
 | `configFiles` | one of text / files | Extra `{name, content}` objects |
 | `outputFormat` | no | `markdown` (default), `json`, `sarif`, `text` |
 | `failOn` | no | Fail the run if findings ≥ severity (`none` default on Store UI) |
@@ -115,6 +134,15 @@ Yes. Prefer `outputFormat: sarif` or `json`, and set `failOn` to the severity ga
 - CLI / rules: [github.com/liyunpeng84/agent-sec-scanner](https://github.com/liyunpeng84/agent-sec-scanner)
 - This Actor: [github.com/liyunpeng84/agent-sec-scanner-actor](https://github.com/liyunpeng84/agent-sec-scanner-actor)
 
+
+### How much memory / time does a scan need?
+
+Default Store run options use **512 MB** and a **5-minute** timeout. A single pasted config usually finishes in a few seconds. Raise memory only if you paste unusually large multi-file batches.
+
+### Does my config leave Apify or get sent to the scanner authors?
+
+No third-party webhook. The Actor runs **offline** inside the Apify run: it only writes findings to **your** run Dataset / key-value store. Config text is not sent to the open-source authors. Still avoid pasting live production secrets into shared or public runs.
+
 ### How is this different from generic secret scanners?
 
 Secret patterns are one family of rules. The focus is **AI agent / MCP configs**: tool-description poisoning, auto-approve / permission breadth, and unsafe MCP launch commands — areas generic secret scanners usually skip.
@@ -124,6 +152,26 @@ Secret patterns are one family of rules. The focus is **AI agent / MCP configs**
 - Scanner: [liyunpeng84/agent-sec-scanner](https://github.com/liyunpeng84/agent-sec-scanner) — MIT
 - This Actor vendors that package under `vendor/agent_sec_scanner/`
 - Actor packaging repo: [liyunpeng84/agent-sec-scanner-actor](https://github.com/liyunpeng84/agent-sec-scanner-actor)
+
+## Categories and discovery keywords
+
+Store categories: **AI**, **Agents**, **Developer tools** (MCP / AI-agent config security focus).
+
+Useful search phrases this Actor targets (honest, product-shaped): MCP security scanner, Claude Desktop mcp.json audit, Cursor MCP servers security, tool poisoning MCP, AI agent config secrets scan, YOLO / auto-approve MCP posture.
+
+
+## Changelog
+
+### 0.1.10
+- README: align Input table default filename with Store prefill (`claude_desktop_config.json`).
+- README: document offline privacy guarantee more explicitly in FAQ; add changelog for Store auditors.
+- No rule-engine or pricing changes.
+
+### 0.1.9
+- Store categories: AI / Agents / Developer tools; default run 512 MB / 300s; FAQ on memory/time.
+
+### 0.1.8
+- Store exampleRunInput → vulnerable Claude Desktop sample; richer input prefill + Example API run.
 
 ## Support
 
